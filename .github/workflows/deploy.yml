@@ -1,0 +1,50 @@
+name: Deploy VPS
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy on VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            set -euo pipefail
+
+            APP_DIR="${{ secrets.DEPLOY_PATH }}"
+
+            if [ -z "$APP_DIR" ]; then
+              echo "DEPLOY_PATH secret is required" >&2
+              exit 1
+            fi
+
+            if [ ! -d "$APP_DIR/.git" ]; then
+              echo "DEPLOY_PATH must point to an existing git checkout: $APP_DIR" >&2
+              exit 1
+            fi
+
+            cd "$APP_DIR"
+            git fetch origin main --prune
+            git checkout -B main origin/main
+            git reset --hard origin/main
+            git pull --ff-only origin main
+
+            docker compose up -d --build
+
+            docker image prune -f
+
+            docker compose ps

@@ -1,0 +1,64 @@
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# compiled output
+dist
+tmp
+out-tsc
+*.tsbuildinfo
+.expo
+.expo-shared
+
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.htpasswd
+**/.htpasswd
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+/attached_assets
+artifacts/escala-generator/output/*.docx
+assets/*.pdf
+assets/*.csv
+assets/*.xlsx
+assets/*.xls
+assets/*.odg
+Modelo de Escalas Verticais/
+Modelo de Escalas Verticais-(1)/
+Modelo de Escalas Verticais.zip
+assets/ICA_63-33_Escala_Vertical_Template.pdf
+assets/ICA_63-33_Escala_Vertical_Template_CLEAN.pdf
+assets/ICA_63-33_Escala_Vertical_Template_CLEAN.odg
+
+# System Files
+.DS_Store
+Thumbs.db
+
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
+
+# Replit
+.cache/
+.local/
