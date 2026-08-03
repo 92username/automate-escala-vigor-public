@@ -46,14 +46,14 @@ Objetivo: tornar o repositório público sem expor dados operacionais, dados pes
 - [x] Remover arquivos sensíveis do histórico Git.
 - [x] Revisar README/docs públicos após a limpeza.
 - [x] Validar `git grep` final para dados pessoais e referências sensíveis.
-- [ ] Abrir PR ou merge de `dev` para `main`.
-- [ ] Tornar o repositório público somente após a limpeza do histórico.
+- [x] Abrir PR ou merge de `dev` para `main`.
+- [x] Tornar o repositório público somente após a limpeza do histórico.
 
 ## Inventário Sensível Identificado
 
 - Bases reais:
-  - `assets/Escala em Vigor 2026(20260625).csv`
-  - `assets/Escala em Vigor 2026.xlsx`
+  - `assets/[REDACTED]`
+  - `assets/[REDACTED`
 - PDFs/ZIPs não necessários ao funcionamento:
   - `Modelo de Escalas Verticais/`
   - `Modelo de Escalas Verticais-(1)/`
@@ -65,10 +65,10 @@ Objetivo: tornar o repositório público sem expor dados operacionais, dados pes
 - Template público mantido no repositório:
   - `assets/ICA_63-33_Escala_Vertical_Template_CLEAN.docx`
 - Pontos de código com nomes reais:
-  - `artifacts/escala-generator/src/lib/employees.ts`
-  - `artifacts/escala-generator/src/lib/vertical-operator-codes.ts`
-  - `artifacts/escala-generator/src/lib/vertical-export/operator-registry.ts`
-  - testes relacionados em `artifacts/escala-generator/src/lib/**/__tests__`
+  - `artifacts/escala-generator/[REDACTED]`
+  - `artifacts/escala-generator/[REDACTED]`
+  - `artifacts/escala-generator/[REDACTED]`
+  - testes relacionados em `artifacts/escala-generator/[REDACTED]`
 
 ## Notas
 
