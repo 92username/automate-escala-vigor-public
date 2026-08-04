@@ -1,4 +1,5 @@
-# Gerador Inteligente de Escalas
+[![CI](https://github.com/92username/automate-escala-vigor-public/actions/workflows/ci.yml/badge.svg)](https://github.com/92username/automate-escala-vigor-public/actions/workflows/ci.yml) [![Deploy VPS](https://github.com/92username/automate-escala-vigor-public/actions/workflows/deploy.yml/badge.svg)](https://github.com/92username/automate-escala-vigor-public/actions/workflows/deploy.yml)
+# Gerador de Escalas
 
 Aplicação web para geração automática de escalas operacionais mensais em regime
 2x2.
