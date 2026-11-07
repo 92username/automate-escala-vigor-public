@@ -124,8 +124,14 @@ export function detectMostRecentMonth(buffer: ArrayBuffer): {
   // A planilha carrega colunas de datas futuras ainda vazias (ex.: até 2029), então a
   // maior data do cabeçalho NÃO é o mês vigente. Restringe aos meses já iniciados e
   // confirma que o mês tem ao menos um turno lançado antes de escolhê-lo.
-  const agora = new Date().getTime();
-  const iniciados = candidates.filter((c) => c.date.getTime() <= agora);
+  const agora = new Date();
+  const anoAgora = agora.getUTCFullYear();
+  const mesAgora = agora.getUTCMonth() + 1;
+  // Compara por ANO/MÊS: o último dia de um mês corrente está no futuro e não pode
+  // desqualificar o mês inteiro.
+  const iniciados = candidates.filter(
+    (c) => c.year < anoAgora || (c.year === anoAgora && c.month <= mesAgora),
+  );
   const pool = (iniciados.length > 0 ? iniciados : candidates).slice(0, 4);
 
   for (const candidato of pool) {
