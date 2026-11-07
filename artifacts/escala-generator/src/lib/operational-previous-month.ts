@@ -87,7 +87,11 @@ export function detectMostRecentMonth(buffer: ArrayBuffer): {
   sheetName: string;
 } | null {
   const wb = XLSX.read(buffer, { type: "array", cellDates: true });
-  let best: { year: number; month: number; sheetName: string; date: Date } | null = null;
+  const byMonth = new Map<
+    string,
+    { year: number; month: number; sheetName: string; date: Date }
+  >();
+
   for (const name of wb.SheetNames) {
     const ws = wb.Sheets[name];
     if (!isWorkbookSheet(ws)) continue;
@@ -103,19 +107,47 @@ export function detectMostRecentMonth(buffer: ArrayBuffer): {
           date = excelSerialToDate(v);
         }
         if (!date) continue;
-        if (!best || date.getTime() > best.date.getTime()) {
-          best = {
-            year: date.getUTCFullYear(),
-            month: date.getUTCMonth() + 1,
-            sheetName: name,
-            date,
-          };
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth() + 1;
+        const key = `${year}-${month}`;
+        const prev = byMonth.get(key);
+        if (!prev || date.getTime() > prev.date.getTime()) {
+          byMonth.set(key, { year, month, sheetName: name, date });
         }
       }
     }
   }
-  if (!best) return null;
-  return { year: best.year, month: best.month, sheetName: best.sheetName };
+
+  const candidates = [...byMonth.values()].sort((a, b) => b.date.getTime() - a.date.getTime());
+  if (candidates.length === 0) return null;
+
+  // A planilha carrega colunas de datas futuras ainda vazias (ex.: até 2029), então a
+  // maior data do cabeçalho NÃO é o mês vigente. Restringe aos meses já iniciados e
+  // confirma que o mês tem ao menos um turno lançado antes de escolhê-lo.
+  const agora = new Date().getTime();
+  const iniciados = candidates.filter((c) => c.date.getTime() <= agora);
+  const pool = (iniciados.length > 0 ? iniciados : candidates).slice(0, 4);
+
+  for (const candidato of pool) {
+    try {
+      const parsed = parseOperationalPreviousMonth(buffer, candidato.year, candidato.month);
+      const temTurno = Object.values(parsed.prevMonth.daysByEmployeeId).some((dias) =>
+        dias.some((dia) => dia !== "OFF"),
+      );
+      if (temTurno) {
+        return {
+          year: candidato.year,
+          month: candidato.month,
+          sheetName: candidato.sheetName,
+        };
+      }
+    } catch {
+      // mês sem colunas completas nesse arquivo: tenta o mês anterior
+    }
+  }
+
+  const fallback = pool[0] ?? candidates[0]!;
+  return { year: fallback.year, month: fallback.month, sheetName: fallback.sheetName };
 }
 
 export function parseOperationalPreviousMonth(
