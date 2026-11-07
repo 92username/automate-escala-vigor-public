@@ -39,9 +39,9 @@ jobs:
 
             cd "$APP_DIR"
             git fetch origin main --prune
-            git checkout -B main origin/main
+            git checkout main 2>/dev/null || git checkout -B main origin/main
             git reset --hard origin/main
-            git pull --ff-only origin main
+            git clean -fd
 
             docker compose up -d --build
 
